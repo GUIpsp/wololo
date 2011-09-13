@@ -43,6 +43,8 @@ def onjoin(paraml, conn=None, bot=None):
     nickserv_name = conn.conf.get('nickserv_name', 'nickserv')
     nickserv_command = conn.conf.get('nickserv_command', 'IDENTIFY %s')
     if nickserv_password:
+        if nickserv_password in bot.config['censored_strings']:
+	    bot.config['censored_strings'].remove(nickserv_password)
         conn.msg(nickserv_name, nickserv_command % nickserv_password)
         bot.config['censored_strings'].append(nickserv_password)
         time.sleep(1)
