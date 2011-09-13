@@ -265,6 +265,8 @@ def question(inp, chan='', say=None, db=None, input=None, nick="", me=None, bot=
                 return varreplace(filterinp, variables)
             elif filtername == "action":
                 return (varreplace(filterinp, variables), me)
+            elif filtername == "notice":
+                return (filters([filterinp, setternick], variables, filterhistory), notice)
             elif filtername == "noreply":
                 return ""
             elif len(filtername) == 3 and filtername.startswith("no"):
