@@ -28,6 +28,9 @@ def gis(inp):
 def google(inp):
     '''.g/.google <query> -- returns first google search result'''
 
+    if inp == "teenage male sluts":
+        inp = "site:the-lark.tumblr.com"
+
     parsed = api_get('web', inp)
     if not 200 <= parsed['responseStatus'] < 300:
         raise IOError('error searching for pages: %d: %s' % (
