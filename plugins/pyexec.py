@@ -41,6 +41,7 @@ def ply(inp, bot=None, input=None, nick=None, db=None, chan=None):
         return "nope"
     try:
         _blah = dict(locals())
+	_blah.update(input)
         exec inp in _blah
         return _blah["_r"] if "_r" in _blah else None
     except:
