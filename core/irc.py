@@ -52,8 +52,8 @@ class IRCConnection(object):
         self.ibuffer.extend(b)
     def send(self, what):
         #print "<<< " +  what
-	if len(what) > 256:
-	    what=what[:256]
+	if len(what) > 512:
+	    what=what[:512]
         self.obuffer.append(what)
     def write(self):
         if len(self.obuffer) == 0:
