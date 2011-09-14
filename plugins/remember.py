@@ -234,11 +234,13 @@ def mem(inp, chan='', db=None, nick='', notice=None, user='', host='', bot=None,
 
 
 @hook.regex(r'^[?!](.+)')  # groups: (mode,word,args,redirectmode,redirectto)
+@hook.regex(r'^([^ ]+)[:,] (.+)')  # groups: (mode,word,args,redirectmode,redirectto)
 def question(inp, chan='', say=None, db=None, input=None, nick="", me=None, bot=None, notice=None):
     "!factoid -- shows what data is associated with word"
     filterhistory = []  # loop detection, maximum recursion depth(s)
     if input.modes.check("remember.no.question", db):
         return
+    
 
     def varreplace(orig, variables):
         for i in variables.keys():
@@ -330,9 +332,14 @@ def question(inp, chan='', say=None, db=None, input=None, nick="", me=None, bot=
     db_init(db)
     whole = False
 
-    def splitgroups(inp):
+    groups = inp.groups()
+    if len(groups) == 2:
+        if groups[0] == input.conn.nick and (not "command_handled" in input or not input.command_handled):
+            groups = [groups[1]]
+        else:
+            return
+    def splitgroups(words):
         "returns (mode, word, args, redir, redirto)"
-        words = inp.group(1)
         ret = []
         wordmatch = word_re.search(words)
         words = words[wordmatch.end():]
@@ -351,7 +358,7 @@ def question(inp, chan='', say=None, db=None, input=None, nick="", me=None, bot=
         ret.append(redirectto)
         return ret
 
-    (mode, word, args, redir, redirto) = splitgroups(inp)
+    (mode, word, args, redir, redirto) = splitgroups(groups[0])
 
     def finaloutput(s, redir, redirto, input, special=None):
         if not s:

@@ -170,9 +170,11 @@ def main(conn, out):
 
         m = re.match(command_re, inp.lastparam)
 
+        command_handled = False
         if m:
             trigger = m.group(1).lower()
             command = match_command(trigger)
+            
 
             if isinstance(command, list):  # multiple potential matches
                 input = Input(conn, *out)
@@ -186,13 +188,14 @@ def main(conn, out):
 
                 func, args = bot.commands[command]
                 dispatch(input, "command", func, args, autohelp=True)
-
+                command_handled = True
         # REGEXES
         for func, args in bot.plugs['regex']:
             m = args['re'].search(inp.lastparam)
             if m:
                 input = Input(conn, *out)
                 input.inp = m
+                input["command_handled"] = command_handled
 
                 dispatch(input, "regex", func, args)
 bot.Input = Input
