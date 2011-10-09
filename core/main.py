@@ -133,7 +133,7 @@ class Handler(object):
         self.input_queue.put(value)
 
 
-def dispatch(input, kind, func, args, autohelp=False, samethread=False):
+def dispatch(input, kind, func, args, autohelp=False):
     for sieve, in bot.plugs['sieve']:
         input = do_sieve(sieve, bot, input, func, kind, args)
         if input == None:
@@ -149,7 +149,7 @@ def dispatch(input, kind, func, args, autohelp=False, samethread=False):
     mutex2.acquire()
     if func._thread:
         input["_mutex"] = mutex
-	input["_beginmutex"] = mutex2
+        input["_beginmutex"] = mutex2
         bot.threads[func].put(input)
     else:
         thread.start_new_thread(run, (func, input, mutex, mutex2))
@@ -193,7 +193,7 @@ def main(conn, out):
         m = re.match(command_re, inp.lastparam)
 
         command_handled = False
-        if m:
+        if m and "spout" not in inp.chan:
             trigger = m.group(1).lower()
             command = match_command(trigger)
             
