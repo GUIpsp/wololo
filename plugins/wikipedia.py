@@ -5,6 +5,7 @@ import re
 
 from util import hook, http
 
+import googlesearch
 
 api_prefix = "http://en.wikipedia.org/w/api.php"
 search_url = api_prefix + "?action=opensearch&format=xml"
@@ -17,6 +18,8 @@ paren_re = re.compile('\s*\(.*\)$')
 def wiki(inp):
     '''.w/.wiki <phrase> -- gets first sentence of wikipedia ''' \
     '''article on <phrase>'''
+    
+    return googlesearch.google("site:en.wikipedia.org "+inp)
 
     x = http.get_xml(search_url, search=inp)
 
