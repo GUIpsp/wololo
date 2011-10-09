@@ -1,4 +1,5 @@
 import thread
+from threading import Lock
 import traceback
 
 
@@ -54,26 +55,34 @@ class Input(dict):
         self[key] = value
 
 
-def run(func, input):
-    args = func._args
+def run(func, input, mutex, mutex2):
+    if mutex2:
+        mutex2.release()
+    if mutex:
+        mutex.acquire()
+    try:
+        args = func._args
 
-    if 'inp' not in input:
-        input.inp = input.paraml
+        if 'inp' not in input:
+            input.inp = input.paraml
 
-    if args:
-        if 'db' in args and 'db' not in input:
-            input.db = get_db_connection(input.conn)
-        if 'input' in args:
-            input.input = input
-        if 0 in args:
-            out = func(input.inp, **input)
+        if args:
+            if 'db' in args and 'db' not in input:
+                input.db = get_db_connection(input.conn)
+            if 'input' in args:
+                input.input = input
+            if 0 in args:
+                out = func(input.inp, **input)
+            else:
+                kw = dict((key, input[key]) for key in args if key in input)
+                out = func(input.inp, **kw)
         else:
-            kw = dict((key, input[key]) for key in args if key in input)
-            out = func(input.inp, **kw)
-    else:
-        out = func(input.inp)
-    if out is not None:
-        input.reply(unicode(out))
+            out = func(input.inp)
+        if out is not None:
+            input.reply(unicode(out))
+    finally:
+        if mutex:
+            mutex.release()
 
 
 def do_sieve(sieve, bot, input, func, type, args):
@@ -99,18 +108,23 @@ class Handler(object):
 
             if input == StopIteration:
                 break
-
-            db = db_conns.get(input.conn)
-            if db is None:
-                db = bot.get_db_connection(input.conn)
-                db_conns[input.conn] = db
-            input.db = db
-
+            input._beginmutex.release()
+            input._mutex.acquire()
             try:
-                run(self.func, input)
-            except:
-                import traceback
-                traceback.print_exc()
+
+                db = db_conns.get(input.conn)
+                if db is None:
+                    db = bot.get_db_connection(input.conn)
+                    db_conns[input.conn] = db
+                input.db = db
+
+                try:
+                    run(self.func, input, None, None)
+                except:
+                    import traceback
+                    traceback.print_exc()
+            finally:
+                input._mutex.release()
 
     def stop(self):
         self.input_queue.put(StopIteration)
@@ -119,7 +133,7 @@ class Handler(object):
         self.input_queue.put(value)
 
 
-def dispatch(input, kind, func, args, autohelp=False):
+def dispatch(input, kind, func, args, autohelp=False, samethread=False):
     for sieve, in bot.plugs['sieve']:
         input = do_sieve(sieve, bot, input, func, kind, args)
         if input == None:
@@ -130,10 +144,18 @@ def dispatch(input, kind, func, args, autohelp=False):
         input.reply(func.__doc__)
         return
 
+    mutex = Lock()
+    mutex2 = Lock()
+    mutex2.acquire()
     if func._thread:
+        input["_mutex"] = mutex
+	input["_beginmutex"] = mutex2
         bot.threads[func].put(input)
     else:
-        thread.start_new_thread(run, (func, input))
+        thread.start_new_thread(run, (func, input, mutex, mutex2))
+    mutex2.acquire()
+    mutex2.release()
+    return mutex
 
 
 def match_command(command):
@@ -171,7 +193,7 @@ def main(conn, out):
         m = re.match(command_re, inp.lastparam)
 
         command_handled = False
-        if m:
+        if m and "spout" not in inp.chan:
             trigger = m.group(1).lower()
             command = match_command(trigger)
             

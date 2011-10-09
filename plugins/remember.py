@@ -311,8 +311,9 @@ def question(inp, chan='', say=None, db=None, input=None, nick="", me=None, bot=
                 newinput.me = cmdme
                 newinput.inp = varreplace(filterinp, variables)
                 newinput.trigger = trigger
-                bot.dispatch(newinput, "command", cmdfunc, cmdargs, autohelp=False)
-                time.sleep(3.5)  # WRONG.. but meh
+                mutex = bot.dispatch(newinput, "command", cmdfunc, cmdargs, autohelp=False)
+                mutex.acquire()
+                mutex.release()
                 outputlines = [filters([line, setternick], variables, filterhistory) for line in outputlines]
                 return outputlines
         else:
@@ -359,6 +360,8 @@ def question(inp, chan='', say=None, db=None, input=None, nick="", me=None, bot=
         return ret
 
     (mode, word, args, redir, redirto) = splitgroups(groups[0])
+    if "/" in word:
+        return
 
     def finaloutput(s, redir, redirto, input, special=None):
         if not s:
