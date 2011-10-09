@@ -193,7 +193,7 @@ def main(conn, out):
         m = re.match(command_re, inp.lastparam)
 
         command_handled = False
-        if m and "spout" not in inp.chan:
+        if m:
             trigger = m.group(1).lower()
             command = match_command(trigger)
             
