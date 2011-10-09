@@ -37,7 +37,7 @@ def db_getall(db, nick, limit=-1):
     return db.execute("""
         select added, text
             from todos
-            where user = ?
+            where lower(user) = lower(?)
             order by added desc
             limit ?
 
@@ -47,7 +47,7 @@ def db_getall(db, nick, limit=-1):
 def db_get(db, nick, id):
     return db.execute("""
         select added, text from todos
-        where user = ?
+        where lower(user) = lower(?)
         order by added desc
         limit 1
         offset ?
@@ -59,7 +59,7 @@ def db_del(db, nick, limit='all'):
         delete from todos
         where rowid in (
           select rowid from todos
-          where user = ?
+          where lower(user) = lower(?)
           order by added desc
           limit ?
           offset ?)
@@ -83,7 +83,7 @@ def db_search(db, nick, query):
         select added, text
         from todos
         where todos match ?
-        and user = ?
+        and lower(user) = lower(?)
         order by added desc
     """, (query, nick))
 
