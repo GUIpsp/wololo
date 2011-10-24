@@ -4,27 +4,30 @@ from util import hook, http
 import usertracking
 import sys
 
+import time
+
 re_lineends = re.compile(r'[\r\n]*')
 
-
 @hook.command
-def python(inp, prefix="direct call", conn=None):
+def python(inp, prefix="direct call", conn=None, nick=None):
     ".python <prog> -- executes python code <prog>"
-    inp = inp.replace("~~n", "adsfervbthbfhyujgyjugkikjgqwedawdfrefgdrgrdthg")
-    inp = inp.replace("~n", "\n")
-    inp = inp.replace("adsfervbthbfhyujgyjugkikjgqwedawdfrefgdrgrdthg", "~n")
-    if conn:
-        conn.send("PRIVMSG lahwran :%s pyexec: %s" % (prefix, inp))
-    res = http.get("http://eval.appspot.com/eval", statement=inp, nick=prefix).splitlines()
 
-    if len(res) == 0:
-        return
-    res[0] = re_lineends.split(res[0])[0]
-    if not res[0] == 'Traceback (most recent call last):':
-        return res[0].decode('utf8', 'ignore')
+#    if conn:
+#        conn.send("PRIVMSG lahwran :%s pyexec: %s" % (prefix, inp))
+    preres = http.get("http://eval.appspot.com/eval", statement=inp, nick=prefix)
+    res = preres.splitlines()
+
+    if len(res) > 0:
+        res[0] = re_lineends.split(res[0])[0]
+        if not res[0] == 'Traceback (most recent call last):':
+            ret = res[0].decode('utf8', 'ignore')
+        else:
+            ret = res[-1].decode('utf8', 'ignore')
     else:
-        return res[-1].decode('utf8', 'ignore')
-
+        ret = None
+    if not ret: 
+        return ("<reply>" if prefix == "direct call" else "") + "no return! try again, perhaps?"
+    return ret
 
 def rexec(s, bot, input, db):
     try:
@@ -40,8 +43,9 @@ def ply(inp, bot=None, input=None, nick=None, db=None, chan=None):
     if not usertracking.query(db, bot.config, nick, chan, "ply"):
         return "nope"
     try:
-        _blah = dict(locals())
+        _blah = dict(globals())
 	_blah.update(input)
+	_blah.update(locals())
         exec inp in _blah
         return _blah["_r"] if "_r" in _blah else None
     except:
