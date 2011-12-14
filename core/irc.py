@@ -66,8 +66,10 @@ class IRCConnection(object):
             b = b[:-1]
         self.ibuffer.extend(b)
     def isspam(self, what):
+        if what.startswith("PONG"):
+            return False
         self.spamtracker.append(what)
-        return self.spamtracker.countitem(what) > 2
+        return self.spamtracker.countitem(what) > 1
     def send(self, what):
         #print "<<< " +  what
 	if len(what) > 512:
