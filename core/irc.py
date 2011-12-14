@@ -9,8 +9,21 @@ irc_noprefix_rem = re.compile(r'()(.*?) (.*)').match
 irc_netmask_rem = re.compile(r':?([^!@]*)!?([^@]*)@?(.*)').match
 irc_param_ref = re.compile(r'(?:^|(?<= ))(:.*|[^ ]+)').findall
 
-
-
+from collections import deque
+class RollingDeque(deque):
+    def __init__(self, *args, **keywords):
+        deque.__init__(self, *args, **keywords)
+        self.limit = 5
+    def append(self, item):
+        deque.append(self, item)
+        if len(self) > self.limit:
+            self.popleft()
+    def countitem(self, item):
+        count = 0
+        for i in self:
+            if i == item:
+                count += 1
+        return count
 class IRCDisconnected(Exception):
     pass
 #TODO: socket timeouts
@@ -27,6 +40,8 @@ class IRCConnection(object):
         self.obuffer = []
         self.extras = ""
         self.lastwrite = 0
+        self.spamtracker = RollingDeque()
+        self.spamtracker.limit = 15
         self.connect()
     def connect(self):
         if self.ssl:
@@ -50,10 +65,15 @@ class IRCConnection(object):
             self.extras = b[-1]
             b = b[:-1]
         self.ibuffer.extend(b)
+    def isspam(self, what):
+        self.spamtracker.append(what)
+        return self.spamtracker.countitem(what) > 2
     def send(self, what):
         #print "<<< " +  what
 	if len(what) > 512:
 	    what=what[:512]
+        if self.isspam(what):
+            return
         self.obuffer.append(what)
     def write(self):
         if len(self.obuffer) == 0:
