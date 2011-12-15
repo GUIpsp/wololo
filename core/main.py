@@ -182,10 +182,9 @@ def isspam(conn, channel, user, message):
         tracker = defaultdict(float)
         conn.floodtracker = tracker
     curtime = time.time()
-    chanuser = (channel, user)
-    if curtime - tracker[chanuser] < 2.0:
+    if curtime - tracker[channel] < 2.0:
         return True
-    tracker[chanuser] = curtime
+    tracker[channel] = curtime
     return False
 
 
