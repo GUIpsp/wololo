@@ -3,6 +3,10 @@ from threading import Lock
 import traceback
 
 
+from collections import defaultdict, deque
+import time
+
+
 thread.stack_size(1024 * 512)  # reduce vm size
 
 
@@ -171,14 +175,30 @@ def match_command(command):
     return command
 
 
+def isspam(conn, channel, user, message):
+    try:
+        tracker = conn.floodtracker
+    except AttributeError:
+        tracker = defaultdict(float)
+        conn.floodtracker = tracker
+    curtime = time.time()
+    chanuser = (channel, user)
+    if curtime - tracker[chanuser] < 2.0:
+        return True
+    tracker[chanuser] = curtime
+    return False
+
+
 def main(conn, out):
     inp = Input(conn, *out)
+
+    spam = isspam(conn, inp.chan, (inp.user, inp.host), inp.msg)
 
     # EVENTS
     for func, args in bot.events[inp.command] + bot.events['*']:
         dispatch(Input(conn, *out), "event", func, args)
 
-    if inp.command == 'PRIVMSG':
+    if not spam and inp.command == 'PRIVMSG':
         # COMMANDS
         if "activation" not in bot.config:
             bot.config["activation"]="."
