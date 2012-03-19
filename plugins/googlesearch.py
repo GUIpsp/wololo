@@ -25,11 +25,8 @@ def gis(inp):
 
 @hook.command('g')
 @hook.command
-def google(inp):
+def google(inp, chan="#notrisucraft"):
     '''.g/.google <query> -- returns first google search result'''
-
-    if inp == "teenage male sluts":
-        inp = "site:the-lark.tumblr.com"
 
     parsed = api_get('web', inp)
     if not 200 <= parsed['responseStatus'] < 300:
