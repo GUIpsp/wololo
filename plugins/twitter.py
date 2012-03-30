@@ -134,6 +134,7 @@ def twitter(inp):
     return "%s %s: %s" % (time, screen_name, text)
 
 @hook.command
+@hook.command("tg")
 def twittergrep(inp):
     ".twittergrep <user> <search> -- gets last tweet by this user which includes the search string"
 
