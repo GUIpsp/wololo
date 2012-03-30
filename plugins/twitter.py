@@ -132,3 +132,48 @@ def twitter(inp):
     screen_name = tweet.find(screen_name).text
 
     return "%s %s: %s" % (time, screen_name, text)
+
+@hook.command
+def twittergrep(inp):
+    ".twittergrep <user> <search> -- gets last tweet by this user which includes the search string"
+
+    if inp.strip().find(' ') == -1:
+        return 'error: invalid request'
+
+    name = inp[:inp.find(' ')]
+    search = inp[inp.find(' ') + 1:].lower().strip()
+
+    try:
+        tweets = http.get_xml('http://twitter.com/statuses/user_timeline/%s.xml' % name)
+    except http.HTTPError, e:
+        errors = {400: 'bad request (ratelimited?)',
+                401: 'tweet is private',
+                403: 'tweet is private',
+                404: 'invalid user/id',
+                500: 'twitter is broken',
+                502: 'twitter is down ("getting upgraded")',
+                503: 'twitter is overloaded (lol, RoR)'}
+        if e.code == 404:
+            return 'error: invalid username'
+        if e.code in errors:
+            return 'error: ' + errors[e.code]
+        return 'error: unknown %s' % e.code
+    except http.URLerror, e:
+        return 'error: timeout'
+
+    if not tweets.findall('status'):
+        return 'error: user has no tweets'
+
+    found = False
+    alltweets = tweets.findall('status')
+    for tweet in alltweets:
+        if search in tweet.find('text').text.lower():
+            found = True
+            break
+
+    if not found:
+        return 'error: none of the user\'s last %s tweets have this string' % len(alltweets)
+
+    time = strftime('%Y-%m-%d %H:%M:%S', strptime(tweet.find('created_at').text, '%a %b %d %H:%M:%S +0000 %Y'))
+    text = unescape_xml(tweet.find('text').text.replace('\n', ''))
+    return "%s %s: %s" % (time, tweet.find('user/screen_name').text, text)
