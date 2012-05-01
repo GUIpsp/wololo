@@ -102,7 +102,7 @@ class IRC(object):
         self.conn = IRCConnection(self, self.server, self.port, self.conf.get("ssl", False))
         self.set_pass(self.conf.get('server_password'))
         self.set_nick(self.nick)
-        self.cmd('USER', [conf.get('user', 'skybot'), '3', '*', conf.get('realname', 'chauffer/wololo fork of skybot')])
+        self.cmd('USER', [conf.get('user', 'skybot'), '3', '*', conf.get('realname', 'skybot 2.0')])
     def process(self, msg):
         msg = decode(msg)
         msg = msg.replace("\r\n", "")

@@ -3,7 +3,7 @@ import socket
 import subprocess
 import time
 
-from util import hook, http
+from util import hook, http, confextra
 
 socket.setdefaulttimeout(10)  # global setting
 
@@ -21,10 +21,9 @@ def get_version():
 
 
 #autorejoin channels
-should_autorejoin = conn.conf.get('kickrejoin','')
 @hook.event('KICK')
 def rejoin(paraml, conn=None):
-    if paraml[1] == conn.nick and should_autorejoin:
+    if paraml[1] == conn.nick and extraconf.conf_autorejoin:
         if paraml[0].lower() in conn.channels:
             conn.join(paraml[0])
 
@@ -32,7 +31,7 @@ def rejoin(paraml, conn=None):
 #join channels when invited
 @hook.event('INVITE')
 def invite(paraml, conn=None):
-    if paraml[-1] == "#bottestspamchan":
+    if paraml[-1] == "#bottestspamchan" and extraconf.conf_autoinvite:
         return "no."
     conn.join(paraml[-1])
 
@@ -62,12 +61,12 @@ def onjoin(paraml, conn=None, bot=None):
 
     # set user-agent
     ident, rev = get_version()
-    http.ua_skybot = 'Skybot/r%d %s http://github.com/lahwran/skybot' % (rev, ident)
+    http.ua_skybot = 'wololo/r%d %s http://github.com/chauffer/skybot' % (rev, ident)
 
 
 @hook.regex(r'^\x01VERSION\x01$')
 def version(inp, notice=None):
     ident, rev = get_version()
-    notice('\x01VERSION skybot %s r%d - http://github.com/lahwran/'
+    notice('\x01VERSION chauffer %s r%d - http://github.com/chauffer/'
            'skybot/\x01' % (ident, rev))
-    http.ua_skybot = 'Skybot/r%d %s http://github.com/lahwran/skybot' % (rev, ident)
+    http.ua_skybot = 'wololo/r%d %s http://github.com/chauffer/wololo' % (rev, ident)
