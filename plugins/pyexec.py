@@ -14,20 +14,37 @@ def python(inp, prefix="direct call", conn=None, nick=None):
 
 #    if conn:
 #        conn.send("PRIVMSG lahwran :%s pyexec: %s" % (prefix, inp))
+    pywu = pywu()
     preres = http.get("http://eval.appspot.com/eval", statement=inp, nick=prefix)
     res = preres.splitlines()
+    ret = parse(res)
+    return ret
 
+def pywu(code = "2+2", nick=None):
+    preres = http.get("http://eval.appspot.com/eval",statement=inp, nick=None)
+    res = preres.splitlines()
+    ret = parse(res)
+    if ret:
+        return True
+    else:
+        return None
+
+
+
+
+
+def parse(res):
     if len(res) > 0:
         res[0] = re_lineends.split(res[0])[0]
         if not res[0] == 'Traceback (most recent call last):':
-            ret = res[0].decode('utf8', 'ignore')
+            parsed = res[0].decode('utf8', 'ignore')
         else:
-            ret = res[-1].decode('utf8', 'ignore')
+            parsed = res[-1].decode('utf8', 'ignore')
     else:
-        ret = None
-    if not ret: 
-        return ("<reply>" if prefix == "direct call" else "") + "no return! try again, perhaps?"
-    return ret
+        parsed = None
+    return parsed
+
+
 
 def rexec(s, bot, input, db):
     try:

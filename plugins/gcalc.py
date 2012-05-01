@@ -1,4 +1,5 @@
 import re
+import pyexec
 
 from util import hook, http
 
@@ -11,7 +12,7 @@ def calc(inp):
 
     # ugh, scraping HTML with regexes
     m = re.search(r'<h2 class=r style="font-size:138%"><b>(.*?)</b>', page)
-
+    
     if m is None:
         return "could not calculate " + inp
 

@@ -21,11 +21,12 @@ def get_version():
 
 
 #autorejoin channels
-#@hook.event('KICK')
-#def rejoin(paraml, conn=None):
-#    if paraml[1] == conn.nick:
-#        if paraml[0].lower() in conn.channels:
-#            conn.join(paraml[0])
+should_autorejoin = conn.conf.get('kickrejoin','')
+@hook.event('KICK')
+def rejoin(paraml, conn=None):
+    if paraml[1] == conn.nick and should_autorejoin:
+        if paraml[0].lower() in conn.channels:
+            conn.join(paraml[0])
 
 
 #join channels when invited
