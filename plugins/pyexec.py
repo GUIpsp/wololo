@@ -19,6 +19,8 @@ def python(inp, prefix="direct call", conn=None, nick=None):
     preres = http.get("http://eval.appspot.com/eval", statement=inp, nick=prefix)
     res = preres.splitlines()
     ret = pystuff.parse(res)
+    if not ret:
+        ret = "No result!"
     return ret
 
 @hook.command
