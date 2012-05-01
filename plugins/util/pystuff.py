@@ -1,6 +1,7 @@
 import http
 import re
 import sys
+from util import hook, http
 
 def warmup(code = "2+2", nick=None):
     preres = http.get("http://eval.appspot.com/eval",statement=code, nick=None)
