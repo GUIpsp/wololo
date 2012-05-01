@@ -65,12 +65,12 @@ def onjoin(paraml, conn=None, bot=None):
 
     # set user-agent
     ident, rev = get_version()
-    http.ua_skybot = 'wololo/r%d %s http://github.com/chauffer/skybot' % (rev, ident)
+    http.ua_skybot = 'wololo/r%d %s http://github.com/chauffer/wololo' % (rev, ident)
 
 
 @hook.regex(r'^\x01VERSION\x01$')
 def version(inp, notice=None):
     ident, rev = get_version()
-    notice('\x01VERSION chauffer %s r%d - http://github.com/chauffer/'
-           'skybot/\x01' % (ident, rev))
+    notice('\x01VERSION wololo %s r%d - http://github.com/chauffer/'
+           'wololo/\x01' % (ident, rev))
     http.ua_skybot = 'wololo/r%d %s http://github.com/chauffer/wololo' % (rev, ident)
