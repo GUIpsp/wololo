@@ -3,7 +3,7 @@ from util import hook, http
 api_key = ""
 
 api_url = "http://ws.audioscrobbler.com/2.0/?format=json"
-
+db.execute("create table if not exists lastfm(nick primary key, acc)")
 @hook.command
 def lastfm(inp, nick='', say=None, db=None):
     sql = db.execute("select acc from lastfm where nick=lower(?)", (nick,)).fetchone();

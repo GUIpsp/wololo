@@ -175,24 +175,24 @@ def match_command(command):
     return command
 
 
-def isspam(conn, channel, user, message):
-    try:
-        tracker = conn.floodtracker
-    except AttributeError:
-        tracker = defaultdict(float)
-        conn.floodtracker = tracker
-    curtime = time.time()
-    if curtime - tracker[channel] < 2.0:
-        return True
-    tracker[channel] = curtime
-    return False
+#def isspam(conn, channel, user, message):
+#   try:
+#       tracker = conn.floodtracker
+#   except AttributeError:
+#       tracker = defaultdict(float)
+#       conn.floodtracker = tracker
+#   curtime = time.time()
+#   if curtime - tracker[channel] < 2.0:
+#       return True
+#   tracker[channel] = curtime
+#   return False
 
 
 def main(conn, out):
     inp = Input(conn, *out)
 
-    spam = isspam(conn, inp.chan, (inp.user, inp.host), inp.msg)
-
+    #spam = isspam(conn, inp.chan, (inp.user, inp.host), inp.msg)
+    spam = False
     # EVENTS
     for func, args in bot.events[inp.command] + bot.events['*']:
         dispatch(Input(conn, *out), "event", func, args)
