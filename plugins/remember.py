@@ -1,6 +1,6 @@
 """
 remember.py: written by Scaevolus 2010, modified by lahwran 2011
-edited by chauffer
+edited by chauffer 2012
 """
 
 from util import hook
@@ -62,13 +62,12 @@ def no(inp, nick='', chan='', db=None, notice=None, bot=None, modes=None):
     if tail.startswith("is "):
         tail = " ".join(tail.split(" ")[1:])
 
-    if tail.startswith("<locked") and not modes.check("remember.lock", db):
+    if tail.startswith("<locked")  and not modes.check("remember.lock", db):
         notice(("[local]" if local else "") + "you may not lock factoids.")
         return
     if tail.startswith("<forgotten"):
-        notice("[local]" if local else "" + " use the command forget instead")
+        notice(("[local]" if local else "") + "Use .forget instead.")
         return
-
     data = get_memory(db, chan, head)
 
     if not data:
@@ -108,7 +107,7 @@ def remember(inp, nick='', chan='', db=None, input=None, notice=None, bot=None):
         notice(("[local]" if local else "") + "you may not lock factoids.")
         return
     if tail.startswith("<forgotten"):
-        notice("[local]" if local else "" + " use the command forget instead")
+        notice(("[local]" if local else "") + "Use .forget instead.")
         return
 
     data = get_memory(db, chan, head)
