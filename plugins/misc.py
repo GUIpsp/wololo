@@ -3,7 +3,10 @@ import socket
 import subprocess
 import time
 
-from util import hook, http, confextra
+from util import hook, http
+
+conf_autorejoin = conn.conf.get('kickrejoin','')
+conf_autoinvite = conn.conf.get('autoinvite','')
 
 socket.setdefaulttimeout(10)  # global setting
 
@@ -23,7 +26,7 @@ def get_version():
 #autorejoin channels
 @hook.event('KICK')
 def rejoin(paraml, conn=None):
-    if paraml[1] == conn.nick and extraconf.conf_autorejoin:
+    if paraml[1] == conn.nick and conf_autorejoin:
         if paraml[0].lower() in conn.channels:
             conn.join(paraml[0])
 
@@ -31,7 +34,7 @@ def rejoin(paraml, conn=None):
 #join channels when invited
 @hook.event('INVITE')
 def invite(paraml, conn=None):
-    if paraml[-1] == "#bottestspamchan" and extraconf.conf_autoinvite:
+    if paraml[-1] == "#bottestspamchan" and conf_autoinvite:
         return "no."
     conn.join(paraml[-1])
 

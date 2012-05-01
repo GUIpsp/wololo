@@ -15,7 +15,7 @@ if not os.path.exists('config'):
             "local irc":
             {
               "server": "localhost",
-              "nick": "skybot",
+              "nick": "wololo",
               "channels": ["#test"]
             }
           },
@@ -34,7 +34,9 @@ if not os.path.exists('config'):
             "!coz",
             "!tell /x"
           ],
-          "admins": []
+          "admins": [],
+          "autorejoin" : False
+          "autoinvite" : False
         }''') + '\n')
 
 
