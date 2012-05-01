@@ -14,10 +14,10 @@ def python(inp, prefix="direct call", conn=None, nick=None):
 
 #    if conn:
 #        conn.send("PRIVMSG lahwran :%s pyexec: %s" % (prefix, inp))
-    pywu = pywu()
+    pywu = pystuff.pywu()
     preres = http.get("http://eval.appspot.com/eval", statement=inp, nick=prefix)
     res = preres.splitlines()
-    ret = parse(res)
+    ret = pystuff.parse(res)
     return ret
 
 
