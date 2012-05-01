@@ -23,4 +23,4 @@ Skybot runs on Python 2.6. Many of the plugins require [[http://codespeak.net/lx
 * lastfm.py* - nick=>lastfm.user gets saved in sqlite
 * wolframalpha.py* working as of the new API system
 * remember.py* workaround to the lock glitch (you could .remember factoid <forgotten><locked> then .unforget it)
-\n* = already edited, will be updated when freebnc.net is up
+* (* = already edited, will be updated when freebnc.net is up)
