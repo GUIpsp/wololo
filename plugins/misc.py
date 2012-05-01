@@ -24,7 +24,7 @@ def get_version():
 
 
 #autorejoin channels
-if autorejoin
+if autorejoin:
     @hook.event('KICK')
     def rejoin(paraml, conn=None):
         if paraml[1] == conn.nick and autorejoin:
