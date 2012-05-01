@@ -3,14 +3,7 @@ import re
 import sys
 re_lineends = re.compile(r'[\r\n]*')
 
-def warmup(code = "2+2", nick=None):
-    preres = http.get("http://eval.appspot.com/eval",statement=code, nick=None)
-    res = preres.splitlines()
-    ret = parse(res)
-    if ret:
-        return True
-    else:
-        return None
+def warmup(code = "2+2", nick=None): preres = http.get("http://eval.appspot.com/eval",statement=code, nick=None)
 
 def parse(res):
     if len(res) > 0:
