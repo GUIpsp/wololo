@@ -1,7 +1,7 @@
 import http
 import re
 import sys
-from util import hook, http
+re_lineends = re.compile(r'[\r\n]*')
 
 def warmup(code = "2+2", nick=None):
     preres = http.get("http://eval.appspot.com/eval",statement=code, nick=None)
@@ -22,3 +22,11 @@ def parse(res):
     else:
         parsed = None
     return parsed
+
+
+def rexec(s, bot, input, db):
+    try:
+        exec(s)
+    except:
+        print s
+        raise

@@ -8,6 +8,7 @@ import time
 
 re_lineends = re.compile(r'[\r\n]*')
 
+
 @hook.command
 def python(inp, prefix="direct call", conn=None, nick=None):
     ".python <prog> -- executes python code <prog>"
@@ -19,15 +20,6 @@ def python(inp, prefix="direct call", conn=None, nick=None):
     res = preres.splitlines()
     ret = pystuff.parse(res)
     return ret
-
-
-def rexec(s, bot, input, db):
-    try:
-        exec(s)
-    except:
-        print s
-        raise
-
 
 @hook.command
 def ply(inp, bot=None, input=None, nick=None, db=None, chan=None):
