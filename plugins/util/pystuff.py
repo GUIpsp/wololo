@@ -1,3 +1,4 @@
+import http
 def pywu(code = "2+2", nick=None):
     preres = http.get("http://eval.appspot.com/eval",statement=inp, nick=None)
     res = preres.splitlines()
