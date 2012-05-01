@@ -13,11 +13,8 @@ re_lineends = re.compile(r'[\r\n]*')
 def python(inp, prefix="direct call", conn=None, nick=None):
     ".python <prog> -- executes python code <prog>"
 
-#    if conn:
-#        conn.send("PRIVMSG lahwran :%s pyexec: %s" % (prefix, inp))
     pywu = pystuff.warmup()
-    preres = http.get("http://eval.appspot.com/eval", statement=inp, nick=prefix)
-    res = preres.splitlines()
+    res = http.get("http://eval.appspot.com/eval", statement=inp, nick=prefix).splitlines()
     ret = pystuff.parse(res)
     if not ret:
         ret = "No result!"
