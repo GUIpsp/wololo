@@ -277,7 +277,7 @@ def question(inp, chan='', say=None, db=None, input=None, nick="", me=None, bot=
             elif filtername == "noreply":
                 return ""
             elif len(filtername) == 3 and filtername.startswith("no"):
-            if inp.group(0).startswith(filtername[2]):
+                if inp.group(0).startswith(filtername[2]):
                     return ""
         else:
             filterhistory.remove(orig)
