@@ -34,9 +34,7 @@ if not os.path.exists('config'):
             "!coz",
             "!tell /x"
           ],
-          "admins": [],
-          "autorejoin" : False
-          "autoinvite" : False
+          "admins": []
         }''') + '\n')
 
 
