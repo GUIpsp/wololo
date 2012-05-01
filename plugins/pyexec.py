@@ -20,7 +20,7 @@ def python(inp, prefix="direct call", conn=None, nick=None):
     res = preres.splitlines()
     ret = pystuff.parse(res)
     if not ret:
-        ret = "No result!"
+        ret = "No result! " + pywu
     return ret
 
 @hook.command
