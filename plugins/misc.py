@@ -7,6 +7,7 @@ from util import hook, http
 
 autorejoin = True
 autoinvite = False
+blacklist = ["#channel","#gtfo"]
 socket.setdefaulttimeout(10)  # global setting
 
 
@@ -23,19 +24,20 @@ def get_version():
 
 
 #autorejoin channels
-@hook.event('KICK')
-def rejoin(paraml, conn=None):
-    if paraml[1] == conn.nick and autorejoin:
-        if paraml[0].lower() in conn.channels:
-            conn.join(paraml[0])
-
+if autorejoin
+    @hook.event('KICK')
+    def rejoin(paraml, conn=None):
+        if paraml[1] == conn.nick and autorejoin:
+            if paraml[0].lower() in conn.channels:
+                conn.join(paraml[0])
 
 #join channels when invited
-@hook.event('INVITE')
-def invite(paraml, conn=None):
-    if paraml[-1] == "#bottestspamchan" and not autoinvite:
-        return "no."
-    conn.join(paraml[-1])
+if autoinvite:
+    @hook.event('INVITE')
+    def invite(paraml, conn=None):
+        if paraml[-1] in blacklist:
+            return "Channel is blacklisted."
+        conn.join(paraml[-1])
 
 
 @hook.event('004')
