@@ -19,7 +19,7 @@ Skybot runs on Python 2.6. Many of the plugins require [[http://codespeak.net/lx
 ==Improvements==
 * magic pyexec with warmup, no more null returns
 * misc.py: autoinvite and autorejoin are toggleable easily, with possibility of ignoring invites for certain channels (array blacklist)
-* lastfm.py - nick=>lastfm.user saved in sqlit
+* lastfm.py - nick=>lastfm.user saved in sqlite
 * wolframalpha.py working as of the new API system
 * remember.py workaround to the lock glitch (you could .remember factoid <forgotten><locked> then .unforget it)
 ==Planned==
