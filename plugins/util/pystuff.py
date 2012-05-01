@@ -2,7 +2,7 @@ import http
 import re
 import sys
 
-def pywu(code = "2+2", nick=None):
+def warmup(code = "2+2", nick=None):
     preres = http.get("http://eval.appspot.com/eval",statement=code, nick=None)
     res = preres.splitlines()
     ret = parse(res)
