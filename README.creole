@@ -1,4 +1,4 @@
-= Skybot =
+= Skybot/wololo =
 
 ==Goals==
 * simplicity
@@ -14,4 +14,8 @@
 * Easy plugin development with automatic reloading and a simple hooking API.
 
 ==Requirements==
-Skybot runs on Python 2.6. Many of the plugins require [[http://codespeak.net/lxml/|lxml]]. It is developed on Ubuntu 9.10 with Python 2.6.4.
+Skybot runs on Python 2.6. Many of the plugins require [[http://codespeak.net/lxml/|lxml]]. It is developed on Ubuntu 10.04 with Python 2.6.5.
+
+==Improvements==
+* magic pyexec with warmup, no more null returns
+
