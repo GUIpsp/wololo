@@ -1,14 +1,15 @@
-from util import hook, http
+from util import hook, http, plugconf, randout
 
-api_key = ""
 
 api_url = "http://ws.audioscrobbler.com/2.0/?format=json"
 
 @hook.command
-def lastfm(inp, nick='', say=None, db=None):
+def lastfm(inp, nick='', say=None, db=None, bot=None):
+    api_key = bot.config.get("api", {}).get("lastfm")
+    if not api_key:
+        return "hey rant at my owner to get an API key added! " + randout.fail()
     db.execute("create table if not exists lastfm(nick primary key, acc)")
     sql = db.execute("select acc from lastfm where nick=lower(?)", (nick,)).fetchone();
-
     if sql:
         if not inp: user = sql[0]
         else:
@@ -29,7 +30,7 @@ def lastfm(inp, nick='', say=None, db=None):
         if inp:  # specified a user name
             return "error: %s" % response["message"]
         else:
-            return "your nick is not a LastFM account. try '.lastfm username'."
+            return "your nick is not a LastFM account " + randout.fail() +". try '.lastfm username'. "
 
     tracks = response["recenttracks"]["track"]
 

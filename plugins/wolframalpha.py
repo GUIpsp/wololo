@@ -1,18 +1,19 @@
 import re
 
-from util import hook, http
-api_key = ""
+from util import hook, http, randout
 
 @hook.command('wa')
 @hook.command
 def wolframalpha(inp, bot=None):
     ".wa <query> -- Computes <query> using Wolfram Alpha."
+    api_key = bot.config.get("api", {}).get("wolframalpha")
     if api_key is None:
-        return "error: no api key set"
+        return "I have a lazy owner, they won't even bother adding an API key! " + randout.fail() 
 
     url = 'http://api.wolframalpha.com/v2/query?format=plaintext'
 
     result = http.get_xml(url, input=inp, appid=api_key)
+    fail = 'No results. ' + randout.fail()
 
     pod_texts = []
     for pod in result.xpath("//pod"):
@@ -32,7 +33,7 @@ def wolframalpha(inp, bot=None):
     ret = '. '.join(pod_texts)
 
     if not pod_texts:
-        return 'No results.'
+        return fail
 
     ret = re.sub(r'\\(.)', r'\1', ret)
 
@@ -46,7 +47,7 @@ def wolframalpha(inp, bot=None):
         ret = re.sub(r'\W+$', '', ret) + '...'
 
     if not ret:
-        return 'No results.'
+        return fail
 
     return ret
 
