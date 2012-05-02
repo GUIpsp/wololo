@@ -22,6 +22,10 @@ if not os.path.exists('config'):
           "disabled_plugins": [],
           "disabled_commands": [],
           "acls": {},
+          "api": {
+            "lastfm" : "",
+            "wolframalpha" : ""
+          },
           "censored_strings":
           [
             "DCC SEND",
