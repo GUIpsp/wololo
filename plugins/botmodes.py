@@ -1,4 +1,4 @@
-from util import hook
+from util import hook, randout
 
 
 def db_init(db):
@@ -85,7 +85,7 @@ def valueadd(bot, input, func, kind, args):
 def mode(inp, input=None, db=None):
     ".mode - set modes on things. admin only."
     if input.nick not in input.bot.config["admins"]:
-        input.notice("only bot admins can use this command, sorry")
+        input.notice("only bot admins can use this command, sorry " + randout.fail())
         return
     db_init(db)
     split = inp.split(" ")
@@ -99,7 +99,7 @@ def mode(inp, input=None, db=None):
     dictized = dict([y for y in [x.split("=") for x in split[1:]] if len(y) == 2])
     names.update(dictized)
     if names["mode"] == None:
-        input.notice("mode name is required!")
+        input.notice("mode name is required! " + randout. fail())
         return
 
     namemap = "mode nick user host authed admin channel chanmodes usermodes".split(" ")
@@ -111,7 +111,7 @@ def mode(inp, input=None, db=None):
             result = posquery(db, sqlargs).fetchall()
         names["limit"] = int(names["limit"])
         if not len(result):
-            input.notice("no results")
+            input.notice("no results " + randout.fail())
             return
         elif len(result) > names["limit"]:
             input.notice("exceeded your provided limit (limit=%d), cutting off" % names["limit"])
@@ -133,8 +133,8 @@ def mode(inp, input=None, db=None):
             return
         db.execute("insert into botmodes(modename, nick, user, host, authed, admin, channel, chanmodes, usermodes) values(?, ?, ?, ?, ?, ?, ?, ?, ?)", sqlargs)
         db.commit()
-        input.notice("done.")
+        input.notice("done. " + randout.success())
     elif split[0] == "delete":
         db.execute("delete from botmodes where modename=? and nick=? and user=? and host=? and authed=? and admin=? and channel=? and chanmodes=? and usermodes=?", sqlargs)
         db.commit()
-        input.notice("done.")
+        input.notice("done. " + randout.success())
