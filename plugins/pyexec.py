@@ -1,6 +1,6 @@
 import re
 
-from util import hook, http, pystuff
+from util import hook, http, pystuff, randout
 import usertracking
 import sys
 
@@ -17,7 +17,7 @@ def python(inp, prefix="direct call", conn=None, nick=None):
         if not output and i not 2:
             output = pystuff.eval(inp, nick)
         if not output and i is 2:
-            output = "no result!"
+            output = "no result " + randout.fail()
         i++
     return output
 
@@ -25,7 +25,7 @@ def python(inp, prefix="direct call", conn=None, nick=None):
 def ply(inp, bot=None, input=None, nick=None, db=None, chan=None):
     "execute local python - only admins can use this"
     if not usertracking.query(db, bot.config, nick, chan, "ply"):
-        return "nope"
+        return "nope " + randout.fail()
     try:
         _blah = dict(globals())
 	_blah.update(input)
