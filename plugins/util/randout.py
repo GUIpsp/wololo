@@ -3,12 +3,12 @@ from random import choice
 enable = True
 
 if enable:
-	success = ['\o/','\o','o/','8D','=D','（ ﾟーﾟ)','(〜￣▽￣)〜',':D','o7',':DDDDDDDDDDDDD']
-	fail = ['（ ´_ゝ｀）','(　ﾟ,_ゝ,ﾟ)','=(',':(',':<',':\'(','D:','DDD:','ಠ_ಠ']
-	def success:
-		return choice(success)
+	asuccess = ['\o/','\o','o/','8D','=D','（ ﾟーﾟ)','(〜￣▽￣)〜',':D','o7',':DDDDDDDDDDDDD']
+	afail = ['（ ´_ゝ｀）','(　ﾟ,_ゝ,ﾟ)','=(',':(',':<',':\'(','D:','DDD:','ಠ_ಠ']
+	def success():
+		return achoice(success)
 	def fail():
-		return choice(fail)
+		return achoice(fail)
 else:
 	def success():
 		return False
