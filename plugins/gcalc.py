@@ -1,7 +1,7 @@
 import re
 import pyexec
 
-from util import hook, http
+from util import hook, http, randout
 
 
 @hook.command
@@ -14,7 +14,7 @@ def calc(inp):
     m = re.search(r'<h2 class=r style="font-size:138%"><b>(.*?)</b>', page)
     
     if m is None:
-        return "could not calculate " + inp
+        return "could not calculate " + inp + " " + randout.fail()
 
     result = m.group(1).replace("<font size=-2> </font>", ",")
     result = result.replace(" &#215; 10<sup>", "E").replace("</sup>", "")
