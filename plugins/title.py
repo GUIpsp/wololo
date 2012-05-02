@@ -1,4 +1,4 @@
-from util import hook, http
+from util import hook, http, randout
 import urlhistory
 import httplib
 import re
@@ -47,7 +47,7 @@ def title(inp, db=None, chan=None):
         urlhistory.db_init(db)
         rows = db.execute("select url from urlhistory where chan = ? order by time desc limit 1", (chan,))
         if not rows.rowcount:
-            return "No url in history."
+            return "No url in history. " + randout.fail()
 
         inp = rows.fetchone()[0]
 
@@ -63,7 +63,7 @@ def title(inp, db=None, chan=None):
         resp = conn.getresponse()
 
         if not (200 <= resp.status < 400):
-            return "Error: HEAD %s %s" % (resp.status, resp.reason)
+            return "Error: HEAD %s %s " + randout.fail() % (resp.status, resp.reason)
 
         errors = check_response(dict(resp.getheaders()))
 
@@ -75,7 +75,7 @@ def title(inp, db=None, chan=None):
     try:
         req = urllib2.urlopen(inp)
     except Exception as e:
-        return "Error: GET %s" % e
+        return "Error: GET %s " + randout.fail() % e
 
     errors = check_response(req.headers)
 
@@ -87,7 +87,7 @@ def title(inp, db=None, chan=None):
     match = titler.search(text)
 
     if not match:
-        return "Error: no title"
+        return "Error: no title " + randout.fail()
 
     rawtitle = match.group(1)
 
