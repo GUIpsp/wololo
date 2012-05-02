@@ -3,9 +3,8 @@ import re
 import sys
 re_lineends = re.compile(r'[\r\n]*')
 
-def warmup(code = "2+2", nick=None):
-    preres = http.get("http://eval.appspot.com/eval",statement=code, nick=None)
-    res = preres.splitlines()
+def eval(code = None, nick=None):
+    res = http.get("http://eval.appspot.com/eval",statement=code, nick=None).splitlines()
     ret = parse(res)
     return ret
 

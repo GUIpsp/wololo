@@ -12,13 +12,14 @@ re_lineends = re.compile(r'[\r\n]*')
 @hook.command
 def python(inp, prefix="direct call", conn=None, nick=None):
     ".python <prog> -- executes python code <prog>"
-
-    pywu = pystuff.warmup()
-    res = http.get("http://eval.appspot.com/eval", statement=inp, nick=prefix).splitlines()
-    ret = pystuff.parse(res)
-    if not ret:
-        ret = "No result!"
-    return ret
+    i = 0
+    while i < 3:
+        if not output and i not 2:
+            output = pystuff.eval(inp, nick)
+        if not output and i is 2:
+            output = "no result!"
+        i++
+    return output
 
 @hook.command
 def ply(inp, bot=None, input=None, nick=None, db=None, chan=None):
