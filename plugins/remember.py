@@ -1,6 +1,5 @@
 """
 remember.py: written by Scaevolus 2010, modified by lahwran 2011
-edited by chauffer 2012
 """
 
 from util import hook
@@ -66,7 +65,7 @@ def no(inp, nick='', chan='', db=None, notice=None, bot=None, modes=None):
         notice(("[local]" if local else "") + "you may not lock factoids.")
         return
     if tail.startswith("<forgotten"):
-        notice(("[local]" if local else "") + "Use .forget instead.")
+        notice("Use .forget instead")
         return
     data = get_memory(db, chan, head)
 
@@ -107,7 +106,7 @@ def remember(inp, nick='', chan='', db=None, input=None, notice=None, bot=None):
         notice(("[local]" if local else "") + "you may not lock factoids.")
         return
     if tail.startswith("<forgotten"):
-        notice(("[local]" if local else "") + "Use .forget instead.")
+        notice("Use .forget instead")
         return
 
     data = get_memory(db, chan, head)
@@ -278,11 +277,11 @@ def question(inp, chan='', say=None, db=None, input=None, nick="", me=None, bot=
             elif filtername == "noreply":
                 return ""
             elif len(filtername) == 3 and filtername.startswith("no"):
-            if inp.group(0).startswith(filtername[2]):
+	        if inp.group(0).startswith(filtername[2]):
                     return ""
-        else:
-            filterhistory.remove(orig)
-            return filters([filterinp, setternick], variables, filterhistory)
+		else:
+		    filterhistory.remove(orig)
+		    return filters([filterinp, setternick], variables, filterhistory)
             elif filtername == "pyexec":
                 preargs = ""
                 for i in variables.keys():
@@ -290,7 +289,7 @@ def question(inp, chan='', say=None, db=None, input=None, nick="", me=None, bot=
                 print preargs + filterinp
                 return filters([pyexec.python(preargs + filterinp), setternick], variables, filterhistory)
             elif filtername.startswith("locked"):
-        filterhistory.remove(orig)
+		filterhistory.remove(orig)
                 return filters([filterinp, setternick], variables, filterhistory)
             cmd = cmdfilter_re.search(filtername)
             if cmd:
@@ -400,7 +399,7 @@ def question(inp, chan='', say=None, db=None, input=None, nick="", me=None, bot=
                  "nick": input.conn.nick or "",
                  "target": redirto or "",
                  "inp": args or "",
-         "ioru": args or nick,
+		 "ioru": args or nick,
                  "word": word or ""}
     if mode == "-":   # information
         message = word + " is "
@@ -423,3 +422,4 @@ def question(inp, chan='', say=None, db=None, input=None, nick="", me=None, bot=
             output("[global] " + default)
     else:
         output(filters(retrieve(word, chan), variables, filterhistory))
+
