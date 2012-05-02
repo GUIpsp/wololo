@@ -1,4 +1,4 @@
-from util import hook, http
+from util import hook, http, randout
 import urllib
 import urllib2
 import httplib
@@ -86,7 +86,7 @@ def deadfly(inp, db=None):
             text = urllib2.urlopen(url, timeout=timeout).read()
         except Exception, e:
             print e
-            return "Error"
+            return "Error " + randout.fail()
 
     result = re_adfly.search(text).group(1)
 
