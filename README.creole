@@ -17,10 +17,12 @@
 Skybot runs on Python 2.6. Many of the plugins require [[http://codespeak.net/lxml/|lxml]]. It is developed on Ubuntu 10.04 with Python 2.6.5.
 
 ==Improvements==
-* magic pyexec with warmup, no more null returns
-* misc.py: autoinvite and autorejoin are toggleable easily, with possibility of ignoring invites for certain channels (array blacklist)
-* lastfm.py - nick=>lastfm.user saved in sqlite
-* wolframalpha.py working as of the new API system
-* remember.py workaround to the lock glitch (you could .remember factoid <forgotten><locked> then .unforget it)
+* plugins/pyexec.py - while cycle if result of the eval is not got at the first attempt
+* plugins/misc.py - autoinvite and autorejoin are toggleable, with possibility of ignoring invites for certain channels (array blacklist)
+* plugins/lastfm.py - nick=>lastfm.user saved in sqlite
+* plugins/wolframalpha.py - working as of the new API system
+* plugins/remember.py - workaround to the lock glitch (you could .remember factoid <forgotten><locked> then .unforget it)
+* plugins/randout.py - random smileys at the end of success/failing outputs
+* core/config.py now has an array for API keys
 ==Planned==
-* ???
+* config to contain plugins config too

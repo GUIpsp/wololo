@@ -9,7 +9,7 @@ from zipfile import ZipFile
 from cStringIO import StringIO
 
 from lxml import etree
-from util import hook, http
+from util import hook, http, randout
 
 
 base_url = "http://thetvdb.com/api/"
@@ -30,13 +30,13 @@ def get_episodes_for_series(seriesname):
     try:
         query = http.get_xml(base_url + 'GetSeries.php', seriesname=seriesname)
     except URLError:
-        res["error"]="error contacting thetvdb.com"
+        res["error"]="error contacting thetvdb.com " + randout.fail()
         return res
 
     series_id = query.xpath('//seriesid/text()')
 
     if not series_id:
-        res["error"] = "unknown tv series (using www.thetvdb.com)"
+        res["error"] = "unknown tv series (using www.thetvdb.com) " + randout.fail()
         return res
 
     series_id = series_id[0]
@@ -45,7 +45,7 @@ def get_episodes_for_series(seriesname):
         series = get_zipped_xml(base_url + '%s/series/%s/all/en.zip' %
                                     (api_key, series_id), path="en.xml")
     except URLError:
-        res["error"] = "error contacting thetvdb.com"
+        res["error"] = "error contacting thetvdb.com " + randout.fail()
         return res
 
     series_name = series.xpath('//SeriesName/text()')[0]
